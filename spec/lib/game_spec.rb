@@ -28,4 +28,42 @@ describe Game do
       expect(test_game.mine_count).to eq(8)
     end
   end
+
+  context 'instance methods' do
+    let(:test_game) { Game.new(5) }
+    let(:test_mine_map) { [[0,0],[1,1],[2,0],[2,2],[3,1]] }
+    let(:populated_test_board) { [
+      ["*", 2,  1,  0, 0],
+      [ 3, "*", 2,  1, 0],
+      ["*", 4, "*", 1, 0],
+      [ 2, "*", 2,  1, 0],
+      [ 1,  1,  1,  0, 0]
+      ] }
+
+    describe '#generate_hidden_board' do
+      it 'populates a board with mine_count number of mines' do
+        allow(test_game).to receive(:mine_count).and_return 7
+        test_game.generate_hidden_board(4,4)
+        expect(test_game.hidden_board.flatten.count("*")).to eq 7
+      end
+
+      it 'populates the neighbor counts correctly' do
+        allow(test_game).to receive(:generate_mine_map)
+          .and_return(test_mine_map)
+        test_game.generate_hidden_board(4,4)
+        expect(test_game.hidden_board).to eq(populated_test_board)
+      end
+
+      it 'will not generate a board with a mine in the forbidden position' do
+        allow(test_game).to receive(:mine_count).and_return 24 # ie, all but 1 a mine
+        test_output = []
+        5.times do
+          test_game.generate_hidden_board(2,2)
+          test_output << test_game.hidden_board[2][2]
+        end
+        expect(test_output).to eq(Array.new(5, 8)) # everytime, completely surrounded by mines
+      end
+    end
+
+  end
 end

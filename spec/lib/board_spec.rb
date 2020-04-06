@@ -44,4 +44,19 @@ describe Board do
       expect(test_neighbors_output.values).to eq(("a".."h").to_a)
     end
   end
+
+  describe '#choice_valid?' do
+    it 'returns false if given an out-of-range selection' do
+      expect(test_board.choice_valid?(test_board.size + 1, test_board.size + 1)).to be false
+    end
+
+    it 'returns false and if given an already-visible selection' do
+      test_board[3][3] = 1
+      expect(test_board.choice_valid?(3,3)).to be false
+    end
+
+    it 'returns true if given a not-yet-visible selection' do
+      expect(test_board.choice_valid?(3,3)).to be true
+    end
+  end
 end

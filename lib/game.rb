@@ -15,7 +15,44 @@ class Game
     make_counts!
   end
 
+  def choose(row, column)
+    generate_hidden_board(row, column) unless hidden_board
+
+    return false unless visible_board.choice_valid?(row, column)
+
+    hidden_value = hidden_board[row][column]
+    case hidden_value
+    when "*"
+      @visible_board = hidden_board
+      visible_board[row][column] = "☹️"
+    when 0
+      visible_board[row][column] = hidden_value
+      reveal_neighbors!(row, column)
+    else
+      visible_board[row][column] = hidden_value
+    end
+  end
+
+  def game_over?
+    won? || lost?
+  end
+
+  def won?(population = visible_board.flatten)
+    return false if lost?
+    population.reject{|p| p.is_a?(Integer) }.count == mine_count
+  end
+
+  def lost?(population = visible_board.flatten)
+    population.include?("☹️")
+  end
+
 private
+
+  def reveal_neighbors!(row, column)
+    visible_board.neighbor_coordinates(row, column).each do |row, column|
+      choose(row, column)
+    end
+  end
 
   def generate_mine_map(forbidden_row, forbidden_column)
     output = []

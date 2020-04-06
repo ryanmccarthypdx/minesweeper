@@ -24,9 +24,9 @@ class Board < Array
   end
 
   def all_coordinates
-    (0...size).to_a.product((0...size).to_a)
+    @all_coordinates ||= (0...size).to_a.product((0...size).to_a)
   end
-  
+
   def choice_valid?(row, column)
     valid_range = 0...size
     valid_range.include?(row) && valid_range.include?(column) && self[row][column] == "■"

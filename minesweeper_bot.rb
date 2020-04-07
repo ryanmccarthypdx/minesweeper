@@ -29,14 +29,24 @@ iterations = gets.chomp.to_i
 iterations = 100000 if iterations == 0
 
 wins = 0
-benchmark = Benchmark.measure {
-  iterations.times do
+solve_total_bm = 0
+build_total_bm = 0
+iterations.times do
+  game = nil
+  solver = nil
+  build_bm = Benchmark.measure {
     game = Game.new(size, mines)
     solver = Solver.new(game)
-    wins += 1 if game.won? # can only win on first initial move
-    wins += 1 if solver.solve
+  }.total
+  build_total_bm += build_bm
+
+  wins += 1 && next if game.won? # can only win on first initial move
+  solve_bm = Benchmark.measure { solver.solve }.total
+  if game.won?
+    wins += 1
+    solve_total_bm += solve_bm
   end
-}
-puts "Total time to run #{iterations} games: #{benchmark.total}"
-puts "Average time per game: #{benchmark.total / iterations}"
-puts "Wins: #{wins} (#{wins * 100/ iterations}%)"
+end
+puts "Average time to build:   #{(build_total_bm * 1000/ iterations).round(2)} milliseconds"
+puts "Average time per win:    #{(solve_total_bm * 1000/ wins).round(2)} milliseconds"
+puts "Percentage of games won: #{((wins * 100).to_f / iterations).round(2)}%"

@@ -9,5 +9,10 @@ To run the specs, run `bundle exec rspec spec -fd`
 To play manually, run `ruby minesweeper.rb`
 To test the automated solver, run `ruby minesweeper_bot.rb`
 
-## Current Results
-On my 2014 Macbook Air, the solver runs a 10x10 board with 10 mines in an average of 3.3 milliseconds, with about 43% victory rate.
+## Results
+All results are on a 2014 Macbook Air
+
+#### Initial Algorithm
+Average time to build:   1.32 milliseconds
+Average time per win:    2.87 milliseconds
+Percentage of games won: 44.03%

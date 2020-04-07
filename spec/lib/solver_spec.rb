@@ -132,6 +132,21 @@ describe Solver do
         end
       end
 
+      context 'when a 0-risk choice comes along later' do
+        let(:test_visible_state) { [
+            ["■", 1,  0 ,  1 , "■"],
+            ["■", 2,  0 ,  2 ,  2 ],
+            ["■", 1,  0 ,  2 , "■"],
+            ["⚑", 1,  0 ,  2 ,  2 ],
+            ["■", 1,  0 ,  1 , "■"]
+          ] }
+
+        it 'only returns the 0-risk choice(s)' do
+          expect(test_solver.find_best_choices_and_flag_mines(test_visible_board))
+            .to contain_exactly([1, 0], [2, 0], [4, 0])
+        end
+      end
+
       context 'when all possible choices are blind guesses' do
         let(:test_visible_state) { [
             ["■", "■", "■", "■", "■"],

@@ -10,9 +10,9 @@ To play manually, run `ruby minesweeper.rb`
 To test the automated solver, run `ruby minesweeper_bot.rb`
 
 ## Results
-All results are on a 2014 Macbook Air
+All results are on a 2014 Macbook Air.
 
-#### Initial Algorithm
-Average time to build:   1.32 milliseconds
-Average time per win:    2.87 milliseconds
-Percentage of games won: 44.03%
+##### 10x10 board with 10 mines:
+Average time to build:   1.33 milliseconds
+Average time per win:    3.54 milliseconds
+Percentage of games won: 69.2%

@@ -19,8 +19,7 @@ class Solver
   end
 
   def find_best_choices_and_flag_mines(visible_board = game.visible_board) # returns multiple if they are safe to click, otherwise an array of the one best choice
-    best_choice = []
-    best_choice_risk = 1
+    best_choice = Hash.new{[]}
 
     all_coordinates.each do |row_index, column_index|
       cell = visible_board[row_index][column_index]
@@ -39,19 +38,17 @@ class Solver
         unclicked_neighbors.each{ |row, column| visible_board[row][column] = "⚑" }
         next
       when 0.0 # all unclicked are NOT mines
-        best_choice_risk = 0
-        best_choice += unclicked_neighbors
+        best_choice[0] += unclicked_neighbors
         next
       else
-        if risk <= best_choice_risk
-          best_choice_risk = risk
-          best_choice = [unclicked_neighbors.first]
+        if risk <= (best_choice.keys.min || 1)
+          best_choice[risk] = [unclicked_neighbors.first]
         else
           next
         end
       end
     end
-    best_choice.uniq
+    return best_choice[best_choice.keys.min].uniq
   end
 
   def solve_until_won
